@@ -4,4 +4,6 @@
 - Test-driven development (TDD)
 - Comprehensions
 - Object Oriented Programming!
+- 
 
+### Authored by the amazing TOM NOYCE
