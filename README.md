@@ -8,5 +8,3 @@
 - - Sets
 - Object Oriented Programming!
 - - OOP upside ya head
-- - I said OOP upside ya head
-- - OOP, I did it again
