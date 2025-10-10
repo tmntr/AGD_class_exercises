@@ -1,4 +1,4 @@
-from Item import Item
+from OOP.Tom_Item import Item
 
 class ShoppingBasket:
     # Constructor
@@ -14,10 +14,10 @@ class ShoppingBasket:
                 #Check if the item is already in the shopping basket
                 if item in self.items:
                     self.items[item] += quantity
-                    item.stock -= quantity
+                    item.stocklevel -= quantity
                 else: 
                     self.items[item] = quantity
-                    item.stock -= quantity
+                    item.stocklevel -= quantity
             else:
                 print(f"I'm afraid that the shop does not have that many available.\nWe only have {item.stocklevel} left")
         else:
