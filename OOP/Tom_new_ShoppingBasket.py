@@ -59,7 +59,11 @@ class ShoppingBasket:
         print("---------------------")    
         print(" = £" + '{0:.2f}'.format(totalCost))
         print("---------------------")    
-    
+    def reset(self):
+        for item in self.items:
+            item.stocklevel += self.items[item]
+        self.items = {}
+        self.checkout = False
     # A method to calculate the total cost of the basket.
     def getTotalCost(self):
         totalCost = 0
