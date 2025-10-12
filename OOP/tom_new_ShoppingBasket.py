@@ -1,4 +1,4 @@
-from OOP.Tom_Item import Item
+from tom_Item import Item
 
 class ShoppingBasket:
     # Constructor
@@ -19,15 +19,20 @@ class ShoppingBasket:
                     self.items[item] = quantity
                     item.stocklevel -= quantity
             else:
+                raise ValueError
                 print(f"I'm afraid that the shop does not have that many available.\nWe only have {item.stocklevel} left")
         else:
-            print("Invalid operation - Quantity must be a positive number!")
+            raise ValueError
+            #print("Invalid operation - Quantity must be a positive number!")
             
     # A method to remove an item from the shopping basket (or reduce its quantity)    
     def removeItem(self,item,quantity=0):
-        if quantity<=0:
+        if quantity==0:
             #Remove the item
+            item.stocklevel += self.items[item]
             self.items.pop(item, None)
+        elif quantity < 0:
+            raise ValueError
         else:
             if item in self.items:
                 if quantity<self.items[item]:
@@ -38,14 +43,24 @@ class ShoppingBasket:
                     #Remove the item
                     item.stocklevel += self.items[item]
                     self.items.pop(item, None)
+            else:
+                raise ValueError
                     
                     
     # A method to update the quantity of an item from the shopping basket    
     def updateItem(self,item,quantity):
         if quantity > 0:
+            if item in self.items:
+                item.stocklevel += self.items[item]-quantity
+            else:
+                item.stocklevel -= quantity
             self.items[item] = quantity
-        else:
+        elif quantity == 0:
+            item.stocklevel += self.items[item]
             self.removeItem(item)
+        else:
+            raise ValueError
+
     
     # A method to view/list the content of the basket.
     def view(self):
