@@ -1,30 +1,53 @@
 import random
 from enum import nonmember
 
-
-def battle(p1,p2):
-    while not(p1.is_dead or p2.is_dead):
-        p1.fight_round(p2)
-        print(p1.stamina, p2.stamina)
-
-    if p1.stamina > p2.stamina:
-        print(f"{p1.name} wins!")
-    elif p2.stamina > p1.stamina:
-        print(f"{p2.name} wins!")
-    else:
-        print("A draw.")
-
 def dice_sum(num: int = 1,sides: int = 6):
     '''Indeedeth doth this procedure most chance-reliant return the grand total
     of all of a specified number of dice of a specified number of sides.'''
     dice_total = sum(random.randint(1, sides) for i in range(num))
     return dice_total
 
+
+class Game:
+    def __init__(self):
+        self.opponent = None
+        self.player = None
+        self.creatures = self.loadcreatures()
+        self.round_result = None
+
+    def loadcreatures(cls):
+        creatures = [
+                    Character("Mr Mean-guy",20,5),
+                    Character("Malicious Malcom",15,8),
+                    Character("Abrasive Alex",18,20)
+                    Character("Machiavellian Megan",5,5),
+                ]
+        return creatures
+
+    def resolve_fight_round(self):
+        self.round_result = self.player.fight_round(self.opponent)
+
+    def choose_opponent(self):
+        self.opponent = random.choice(self.creatures)
+
+    def battle(self,p1,p2):
+        while not(self.player.is_dead or p2.is_dead):
+            print(self.player.stamina, p2.stamina)
+            self.player.fight_round(p2)
+        if self.player.stamina > p2.stamina:
+            print(f"{self.player.name} wins!")
+        elif p2.stamina > p1.stamina:
+            print(f"{p2.name} wins.")
+            print("Game Over")
+        else:
+            print("A draw.")
+
 class Character:
     def __init__(self,name,skill,stamina):
         self.name = name
         self.skill = skill
-        self.stamina = stamina
+        self.defaultstamina = stamina
+        self.stamina = self.defaultstamina*1
         self.roll = None
         self.score = None
     def __repr__(self):
@@ -42,13 +65,18 @@ class Character:
         self.find_score()
         op.find_score()
 
+        winner = None
+
         if self.score < op.score:
             self.take_hit()
+            winner = op
         elif self.score > op.score:
             op.take_hit()
+            winner = self
         else:
             self.take_hit(1)
             op.take_hit(1)
+        return Winner
 
     def return_rolls_status(self):
         return(f"{self.name} rolled a {self.roll} for a total score of {self.score}")
@@ -63,6 +91,9 @@ class Character:
             self.stamina = 0
         else:
             self.stamina = max(self.stamina,1)
+
+    def reset_stamina(self):
+        self.stamina = self.defaultstamina*1
 
 class PlayerCharacter(Character):
     def __init__(self,name,skill,stamina,luck):
@@ -83,10 +114,7 @@ Tim = Character("Tim",5,1)
 Him = Character("Him",50,50)
 Kim = Character("Kim",5,5)
 
-Bim = PlayerCharacter("Bim",1,1,100)
 
-characters = [Bim,Jim,Tim,Him,Kim]
+Bim = PlayerCharacter.generate_player_character("Bim")
 
-
-
-
+print(Bim.__repr__())
