@@ -17,10 +17,8 @@ class Game:
 
     def loadcreatures(cls):
         creatures = [
-                    Character("Mr Mean-guy",20,5),
-                    Character("Malicious Malcom",15,8),
-                    Character("Abrasive Alex",18,20)
-                    Character("Machiavellian Megan",5,5),
+                    Character('orc', skill=5, stamina=12),
+                    Character('dragon', skill=8, stamina=15)
                 ]
         return creatures
 
@@ -52,11 +50,17 @@ class Character:
         self.score = None
     def __repr__(self):
         return f"Character('{self.name}', skill={self.skill}, stamina={self.stamina})"
-
+    def __str__(self):
+        return f"{self.name}"
     def find_score(self):
         self.roll = dice_sum()
         self.score = self.roll+self.skill
 
+    def return_character_status(self):
+        return f'{self.name} has skill {self.skill} and stamina {self.stamina}'
+
+    def return_roll_status(self):
+        return f'{self.name} rolled {self.roll} for a total score of {self.score}'
 
     def take_hit(self,damage = 2):
         self.stamina -= damage
@@ -65,18 +69,20 @@ class Character:
         self.find_score()
         op.find_score()
 
-        winner = None
+        win = None
 
         if self.score < op.score:
             self.take_hit()
-            winner = op
+            win = 'lost'
         elif self.score > op.score:
             op.take_hit()
-            winner = self
+            win = 'win'
         else:
             self.take_hit(1)
             op.take_hit(1)
-        return Winner
+            win = 'draw'
+
+        return win
 
     def return_rolls_status(self):
         return(f"{self.name} rolled a {self.roll} for a total score of {self.score}")
@@ -99,6 +105,16 @@ class PlayerCharacter(Character):
     def __init__(self,name,skill,stamina,luck):
         super().__init__(name,skill,stamina)
         self.luck = luck
+    def test_luck(self):
+        self.luck -= 1
+        diceroll = dice_sum(2)
+        self.roll = diceroll
+        if diceroll <= self.luck:
+            return True
+        else:
+            return False
+    def __repr__(self):
+        return f"PlayerCharacter('{self.name}', skill={self.skill}, stamina={self.stamina}, luck={self.luck})"
 
     @classmethod
     def generate_player_character(cls,name):
@@ -109,7 +125,9 @@ class PlayerCharacter(Character):
 
 
 
-Jim = Character("Jim",1,5)
+
+
+'''Jim = Character("Jim",1,5)
 Tim = Character("Tim",5,1)
 Him = Character("Him",50,50)
 Kim = Character("Kim",5,5)
@@ -117,4 +135,4 @@ Kim = Character("Kim",5,5)
 
 Bim = PlayerCharacter.generate_player_character("Bim")
 
-print(Bim.__repr__())
+print(Bim.__repr__())'''
