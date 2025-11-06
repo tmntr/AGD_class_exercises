@@ -10,23 +10,32 @@ def dice_sum(num: int = 1,sides: int = 6):
 
 class Game:
     def __init__(self):
-        self.opponent = None
+        self.op = None
         self.player = None
         self.creatures = self.loadcreatures()
         self.round_result = None
 
+    def set_player(self,player):
+        self.player = player
+
     def loadcreatures(cls):
         creatures = [
-                    Character('orc', skill=5, stamina=12),
-                    Character('dragon', skill=8, stamina=15)
+                    Character('orc', 5, 12),
+                    Character('dragon', 8, 15),
+                    Character("Jim", 10, 20),
+                    Character("Tim", 20, 10),
+                    Character("Kim", 40, 40),
+                    Character("Him", 100, 100),
                 ]
         return creatures
 
     def resolve_fight_round(self):
-        self.round_result = self.player.fight_round(self.opponent)
+        self.round_result = self.player.fight_round(self.op)
+    def return_round_result(self):
+        return f"{self.player.return_roll_status()}\n{self.op.return_roll_status()}"
 
     def choose_opponent(self):
-        self.opponent = random.choice(self.creatures)
+        self.op = random.choice(self.creatures)
 
     def battle(self,p1,p2):
         while not(self.player.is_dead or p2.is_dead):
@@ -48,6 +57,7 @@ class Character:
         self.stamina = self.defaultstamina*1
         self.roll = None
         self.score = None
+        self.xp = (skill+stamina)
     def __repr__(self):
         return f"Character('{self.name}', skill={self.skill}, stamina={self.stamina})"
     def __str__(self):
@@ -127,12 +137,15 @@ class PlayerCharacter(Character):
 
 
 
-'''Jim = Character("Jim",1,5)
-Tim = Character("Tim",5,1)
-Him = Character("Him",50,50)
-Kim = Character("Kim",5,5)
 
+Bim = PlayerCharacter.generate_player_character('Bim')
 
-Bim = PlayerCharacter.generate_player_character("Bim")
+print(Bim.__repr__())
 
-print(Bim.__repr__())'''
+game = Game()
+
+game.set_player(Bim)
+game.choose_opponent()
+while not game.player.is_dead and not game.op.is_dead:
+    game.resolve_fight_round()
+    print(game.return_round_result())
