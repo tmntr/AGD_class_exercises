@@ -37,17 +37,14 @@ class Game:
     def choose_opponent(self):
         self.op = random.choice(self.creatures)
 
-    def battle(self,p1,p2):
-        while not(self.player.is_dead or p2.is_dead):
-            print(self.player.stamina, p2.stamina)
-            self.player.fight_round(p2)
-        if self.player.stamina > p2.stamina:
-            print(f"{self.player.name} wins!")
-        elif p2.stamina > p1.stamina:
-            print(f"{p2.name} wins.")
-            print("Game Over")
+    def continue_fighting(self):
+        return not (self.player.is_dead or self.op.is_dead)
+
+    def attempt_flee(self):
+        if dice_sum(3) > self.op.skill:
+            return True
         else:
-            print("A draw.")
+            return False
 
 class Character:
     def __init__(self,name,skill,stamina):
@@ -65,6 +62,7 @@ class Character:
     def find_score(self):
         self.roll = dice_sum()
         self.score = self.roll+self.skill
+
 
     def return_character_status(self):
         return f'{self.name} has skill {self.skill} and stamina {self.stamina}'
@@ -93,6 +91,8 @@ class Character:
             win = 'draw'
 
         return win
+
+
 
     def return_rolls_status(self):
         return(f"{self.name} rolled a {self.roll} for a total score of {self.score}")
@@ -123,6 +123,9 @@ class PlayerCharacter(Character):
             return True
         else:
             return False
+
+
+
     def __repr__(self):
         return f"PlayerCharacter('{self.name}', skill={self.skill}, stamina={self.stamina}, luck={self.luck})"
 
@@ -138,14 +141,3 @@ class PlayerCharacter(Character):
 
 
 
-Bim = PlayerCharacter.generate_player_character('Bim')
-
-print(Bim.__repr__())
-
-game = Game()
-
-game.set_player(Bim)
-game.choose_opponent()
-while not game.player.is_dead and not game.op.is_dead:
-    game.resolve_fight_round()
-    print(game.return_round_result())
