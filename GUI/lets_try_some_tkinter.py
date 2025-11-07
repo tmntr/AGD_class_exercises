@@ -18,9 +18,9 @@ class MainFrame(tk.Frame):
     def place_widgets(self):
         self.txt.grid(row=0, column=0)
         self.btn.grid(row=0, column=0)
-        self.btn2.grid(row=0, column=0)
-        self.edt.grid(row=1, column=1)
-        self.sld.grid(row=2, column=2)
+        self.btn2.grid(row=0, column=1)
+        self.edt.grid(row=5, column=0)
+        self.sld.grid(row=10, column=0)
 
 if __name__ == '__main__':
     root = tk.Tk()
