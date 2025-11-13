@@ -72,8 +72,20 @@ class gamedisplay:
 gameCLI = gamedisplay()
 
 gameCLI.game_setup()
-gameCLI.battle_setup()
-gameCLI.battle()
+running = True
+while running:
+    gameCLI.battle_setup()
+    gameCLI.battle()
+    decision = input("Do you want to play again? (y/n)\n")
+    if decision == "n":
+        cooltype('Are you sure? (y/n/)\n')
+        decision = input()
+        if decision == "n":
+
+    elif decision == "y":
+        pass
+    else:
+        cooltype("I'll take that as a yes!")
 
 
 
