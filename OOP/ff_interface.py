@@ -81,6 +81,15 @@ while running:
         cooltype('Are you sure? (y/n/)\n')
         decision = input()
         if decision == "n":
+            cooltypecolour('Wrong choice',0.1,Fore.RED)
+            gameCLI.game.commencehim()
+            cooltypecolour('You must now fight...',0.1,Fore.RED)
+            cooltypecolour('HIM',1,Fore.RED)
+            gameCLI.battle()
+            if gameCLI.game.player.is_dead == False:
+                cooltype('You may now exit.')
+                running = False
+
 
     elif decision == "y":
         pass
