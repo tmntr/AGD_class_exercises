@@ -42,14 +42,16 @@ class ButtonClicker(tk.Frame):
 class BackgroundColorFrame(tk.Frame):
     def __init__(self, master):
         super().__init__(master)
-
+        self.master = master
         # Color choices
 
         self.colors = ['red', 'green', 'yellow']
 
         # Create a tk variable which will hold the value of the selcted color
+        #self.selected_color = self.colors[0]
         self.selected_color = tk.StringVar()
         self.selected_color.set(self.colors[0])
+        self.config(bg = self.selected_color.get())
 
         # Create radio buttons (list comprehension)
         self.radio_options = [tk.Radiobutton(self, text=color,
@@ -65,6 +67,8 @@ class BackgroundColorFrame(tk.Frame):
             ro.pack(side=tk.TOP, anchor='w', padx=(5, 10), pady=5)
 
     def change_color(self):
+        self.master.config(bg = self.selected_color.get())
+        self.config(bg = self.selected_color.get())
         pass
         #self.configure(bg=str(self.selected_color))
 
