@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 
 
 class MainApp(tk.Tk):
@@ -41,6 +42,24 @@ class FormFrame(tk.Frame):
         self.checkbox_options = [tk.Checkbutton(self, text=item, onvalue=1, offvalue=0,background = 'ivory2') for item in
                                  ["python", "javascript"]]
 
+
+        self.countrytxt = tk.Label(self, text='Country:',background='ivory2')
+        self.countrybox = ttk.Combobox(self,width = 30)
+        self.countrybox['values'] = ['Jamiaca',
+                                     'UK',
+                                     'Taiwan',
+                                     'Ireland',
+                                     'India',
+                                     'New Zealand',
+                                     'South Korea',
+                                     'Uganda',
+                                     'The Unconvincing States of North America',
+                                     'Lichtenstein',
+                                     'Switzerland',
+                                     'Middle Earth',
+                                     ]
+
+
         self.submitbutton = tk.Button(self, text='Submit', foreground='black', background='ivory4',
                                       activebackground='blue', activeforeground='white', width=6)
         self.config(bg='ivory2')
@@ -55,7 +74,8 @@ class FormFrame(tk.Frame):
         self.email.grid(row=2, column=1)
         self.agetxt.grid(row=3, column=0)
         self.sld.grid(row=3, column=1)
-        self.submitbutton.grid(row=6, column=1, columnspan=3)
+
+        self.submitbutton.grid(row=7, column=1, columnspan=3)
         self.gendertxt.grid(row=4, column=0)
 
         i = 1
@@ -69,7 +89,8 @@ class FormFrame(tk.Frame):
         for co in self.checkbox_options:
             co.grid(row=5, column=j, padx=(5, 10), pady=5)
             j += 1
-
+        self.countrytxt.grid(row=6, column=0)
+        self.countrybox.grid(row=6, column=1)
 
 if __name__ == '__main__':
     mainframe = MainApp()
