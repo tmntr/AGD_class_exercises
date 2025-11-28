@@ -1,6 +1,7 @@
 class Temperature:
     def __init__(self, kelvin):
         self._kelvin = kelvin
+        self.temps = {"Kelvin":self.kelvin,"Celsius":self.celsius,"Fahrenheit":self.fahrenheit}
 
     @property
     def kelvin(self) -> float:

@@ -16,6 +16,7 @@ class TemperatureConvertingFrame(tk.Frame):
         self.og_temperature =temp.Temperature(0)
 
         self.og_text_temp = tk.StringVar()
+        self.og_text_temp.trace_add("write",self.on_change)
 
         self.og_temperature_box = tk.Entry(self,textvariable=self.og_text_temp,width = 20)
 
@@ -27,7 +28,7 @@ class TemperatureConvertingFrame(tk.Frame):
 
         self.temporarytemperature = tk.IntVar()
 
-        self.devslider = tk.Scale(self,variable =self.temporarytemperature,from_=0, to=1000, length=400, command=self.updatecolour)
+        self.devslider = tk.Scale(self,variable =self.temporarytemperature,from_=0, to=1273, length=400, command=self.updatecolour)
 
         self.conv_text_temp = tk.StringVar()
 
@@ -35,11 +36,17 @@ class TemperatureConvertingFrame(tk.Frame):
 
         self.conv_units = UnitsFrame(self)
 
+        self.conv_selected_unit = self.conv_units.selected_unit
+
         self.submit_button = tk.Button(self,background='cyan',foreground='blue',activebackground='blue',activeforeground='white',width = 20,text = 'CONVERT')
+
+        self.updatecolour(self.temporarytemperature.get())
 
         self.place_widgets()
 
     def updatecolour(self, temp):
+        self.og_units.updatecolour(self.get_current_colour(int(temp)))
+        self.conv_units.updatecolour(self.get_current_colour(int(temp)))
         self.config(background=self.get_current_colour(int(temp)))
 
     def place_widgets(self):
@@ -69,14 +76,24 @@ class TemperatureConvertingFrame(tk.Frame):
         else:
             colour = (255,255,255)
 
-        print(colour)
+
         colourforuse = (int(colour[0]),int(colour[1]),int(colour[2]))
         return self.from_rgb(colourforuse)
 
+    def on_change(self,*args):
+        self.conv_text_temp.set(self.calculate())
+        self.conv_temperature_box.config(text = self.og_temperature_box.get())
 
 
     def calculate(self):
-        pass
+        self.og_temperature.temps[self.og_selected_unit.get()] = self.og_text_temp.get()
+
+        self.conv_temperature.kelvin  = self.og_temperature.kelvin
+
+
+        self.conv_text_temp.set(self.conv_temperature.temps[self.conv_selected_unit.get()])
+
+        return self.og_text_temp
 
 class UnitsFrame(tk.Frame):
     def __init__(self, master,colour = 'Red'):
@@ -94,7 +111,7 @@ class UnitsFrame(tk.Frame):
 
         self.units_options = [tk.Radiobutton(self, text=unit,
                                              value=unit,
-                                             variable=self.selected_unit,background=colour
+                                             variable=self.selected_unit,background=colour,foreground="cyan"
                                              )
                               for unit in self.units]
 
@@ -105,7 +122,9 @@ class UnitsFrame(tk.Frame):
         for unit in self.units_options:
             unit.grid(column=i, row=0)
             i+=1
-
+    def updatecolour(self,colour):
+        for unit in self.units_options:
+            unit.config(background=colour)
 
 if __name__ == '__main__':
     app = TempApp()
