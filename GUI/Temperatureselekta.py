@@ -16,7 +16,7 @@ class TemperatureConvertingFrame(tk.Frame):
         self.og_temperature =temp.Temperature(0)
 
         self.og_text_temp = tk.StringVar()
-        self.og_text_temp.trace_add("write",self.on_change)
+        #self.og_text_temp.trace_add("write",self.on_change)
 
         self.og_temperature_box = tk.Entry(self,textvariable=self.og_text_temp,width = 20)
 
@@ -26,11 +26,14 @@ class TemperatureConvertingFrame(tk.Frame):
 
         self.conv_temperature = temp.Temperature(0)
 
-        self.temporarytemperature = tk.IntVar()
+        #self.temporarytemperature = tk.IntVar()
 
-        self.devslider = tk.Scale(self,variable =self.temporarytemperature,from_=0, to=1273, length=400, command=self.updatecolour)
+
+        #self.devslider = tk.Scale(self,variable =self.temporarytemperature,from_=0, to=1273, length=400, command=self.updatecolour)
 
         self.conv_text_temp = tk.StringVar()
+
+        #self.conv_text_temp.trace_add("write", self.updatecolour)
 
         self.conv_temperature_box = tk.Label(self, text=self.conv_text_temp.get(),background = 'white',width = 20)
 
@@ -38,9 +41,9 @@ class TemperatureConvertingFrame(tk.Frame):
 
         self.conv_selected_unit = self.conv_units.selected_unit
 
-        self.submit_button = tk.Button(self,background='cyan',foreground='blue',activebackground='blue',activeforeground='white',width = 20,text = 'CONVERT')
+        self.submit_button = tk.Button(self,background='cyan',foreground='blue',activebackground='blue',activeforeground='white',width = 20,text = 'CONVERT',command=self.on_change)
 
-        self.updatecolour(self.temporarytemperature.get())
+        self.updatecolour(self.conv_temperature.kelvin)
 
         self.place_widgets()
 
@@ -58,7 +61,7 @@ class TemperatureConvertingFrame(tk.Frame):
         self.submit_button.grid(row=1,column=0,sticky='n',columnspan=2,**settings)
         self.og_units.grid(row=2, column=0, sticky='w',**settings)
         self.conv_units.grid(row = 2, column = 1, sticky = 'e',**settings)
-        self.devslider.grid(row = 3, column=0, sticky = 'w',**settings)
+        #self.devslider.grid(row = 3, column=0, sticky = 'w',**settings)
 
     def from_rgb(self,rgb):
         """translates an rgb tuple of int to a tkinter friendly color code
@@ -82,18 +85,36 @@ class TemperatureConvertingFrame(tk.Frame):
 
     def on_change(self,*args):
         self.conv_text_temp.set(self.calculate())
-        self.conv_temperature_box.config(text = self.og_temperature_box.get())
+        self.conv_temperature_box.config(text=self.conv_text_temp.get())
+        self.updatecolour(self.conv_temperature.kelvin)
+
 
 
     def calculate(self):
-        self.og_temperature.temps[self.og_selected_unit.get()] = self.og_text_temp.get()
+        if self.og_selected_unit.get() == "Kelvin":
+            self.og_temperature.kelvin = float(self.og_text_temp.get())
+        elif self.og_selected_unit.get() == "Celsius":
+            self.og_temperature.celsius = float(self.og_text_temp.get())
+        elif self.og_selected_unit.get() == "Fahrenheit":
+            self.og_temperature.fahrenheit = float(self.og_temperature_box.get())
 
-        self.conv_temperature.kelvin  = self.og_temperature.kelvin
+        if self.conv_selected_unit.get() == "Kelvin":
+            self.conv_temperature.kelvin = self.og_temperature.kelvin
+            self.conv_text_temp.set(str(self.conv_temperature.kelvin))
+        elif self.conv_selected_unit.get() == "Celsius":
+            self.conv_temperature.celsius = self.og_temperature.celsius
+            self.conv_text_temp.set(str(self.conv_temperature.celsius))
+        elif self.conv_selected_unit.get() == "Fahrenheit":
+            self.conv_temperature.fahrenheit = self.og_temperature.fahrenheit
+            self.conv_text_temp.set(str(self.conv_temperature.fahrenheit))
+
+        self.conv_text_temp.set(f"{float(self.conv_text_temp.get()):.2f}")
+
+        return self.conv_text_temp.get()
 
 
-        self.conv_text_temp.set(self.conv_temperature.temps[self.conv_selected_unit.get()])
 
-        return self.og_text_temp
+
 
 class UnitsFrame(tk.Frame):
     def __init__(self, master,colour = 'Red'):
