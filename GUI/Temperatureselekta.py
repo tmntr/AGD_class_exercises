@@ -16,13 +16,14 @@ class TemperatureConvertingFrame(tk.Frame):
         self.og_temperature =temp.Temperature(0)
 
         self.og_text_temp = tk.StringVar()
-        #self.og_text_temp.trace_add("write",self.on_change)
+        self.og_text_temp.trace_add("write",self.on_change)
 
         self.og_temperature_box = tk.Entry(self,textvariable=self.og_text_temp,width = 20)
 
         self.og_units = UnitsFrame(self)
 
         self.og_selected_unit = self.og_units.selected_unit
+        self.og_selected_unit.trace_add("write",self.on_change)
 
         self.conv_temperature = temp.Temperature(0)
 
@@ -40,8 +41,10 @@ class TemperatureConvertingFrame(tk.Frame):
         self.conv_units = UnitsFrame(self)
 
         self.conv_selected_unit = self.conv_units.selected_unit
+        self.conv_selected_unit.trace_add("write",self.on_change)
 
-        self.submit_button = tk.Button(self,background='cyan',foreground='blue',activebackground='blue',activeforeground='white',width = 20,text = 'CONVERT',command=self.on_change)
+
+        #self.submit_button = tk.Button(self,background='cyan',foreground='blue',activebackground='blue',activeforeground='white',width = 20,text = 'CONVERT',command=self.on_change)
 
         self.updatecolour(self.conv_temperature.kelvin)
 
@@ -53,14 +56,14 @@ class TemperatureConvertingFrame(tk.Frame):
         self.config(background=self.get_current_colour(int(temp)))
 
     def place_widgets(self):
-        settings = {'padx':10,'pady':10}
+        settings = {'padx':24,'pady':40}
 
 
         self.og_temperature_box.grid(row=0, column=0,sticky = 'w',**settings)
         self.conv_temperature_box.grid(row=0, column=1, sticky='e',**settings)
-        self.submit_button.grid(row=1,column=0,sticky='n',columnspan=2,**settings)
-        self.og_units.grid(row=2, column=0, sticky='w',**settings)
-        self.conv_units.grid(row = 2, column = 1, sticky = 'e',**settings)
+        #self.submit_button.grid(row=1,column=0,sticky='n',columnspan=2,**settings)
+        self.og_units.grid(row=1, column=0, sticky='w',**settings)
+        self.conv_units.grid(row = 1, column = 1, sticky = 'e',**settings)
         #self.devslider.grid(row = 3, column=0, sticky = 'w',**settings)
 
     def from_rgb(self,rgb):
@@ -84,19 +87,26 @@ class TemperatureConvertingFrame(tk.Frame):
         return self.from_rgb(colourforuse)
 
     def on_change(self,*args):
-        self.conv_text_temp.set(self.calculate())
+        try:
+            self.conv_text_temp.set(self.calculate())
+        except:
+            self.conv_text_temp.set('')
         self.conv_temperature_box.config(text=self.conv_text_temp.get())
         self.updatecolour(self.conv_temperature.kelvin)
 
 
 
     def calculate(self):
+        #if self.og_text_temp.get() == '':
+            #self.og_text_temp.set('0')
         if self.og_selected_unit.get() == "Kelvin":
             self.og_temperature.kelvin = float(self.og_text_temp.get())
         elif self.og_selected_unit.get() == "Celsius":
             self.og_temperature.celsius = float(self.og_text_temp.get())
         elif self.og_selected_unit.get() == "Fahrenheit":
-            self.og_temperature.fahrenheit = float(self.og_temperature_box.get())
+            self.og_temperature.fahrenheit = float(self.og_text_temp.get())
+        elif self.og_selected_unit.get() == "Newton":
+            self.og_temperature.newton = float(self.og_text_temp.get())
 
         if self.conv_selected_unit.get() == "Kelvin":
             self.conv_temperature.kelvin = self.og_temperature.kelvin
@@ -107,6 +117,9 @@ class TemperatureConvertingFrame(tk.Frame):
         elif self.conv_selected_unit.get() == "Fahrenheit":
             self.conv_temperature.fahrenheit = self.og_temperature.fahrenheit
             self.conv_text_temp.set(str(self.conv_temperature.fahrenheit))
+        elif self.conv_selected_unit.get() == "Newton":
+            self.conv_temperature.newton = self.og_temperature.newton
+            self.conv_text_temp.set(str(self.conv_temperature.newton))
 
         self.conv_text_temp.set(f"{float(self.conv_text_temp.get()):.2f}")
 
@@ -121,7 +134,7 @@ class UnitsFrame(tk.Frame):
         super().__init__(master)
         self.master = master
 
-        self.units = ['Kelvin','Celsius','Fahrenheit']
+        self.units = ['Kelvin','Celsius','Fahrenheit','Newton']
 
         self.selected_unit = tk.StringVar()
         self.selected_unit.set(self.units[0])
@@ -149,5 +162,5 @@ class UnitsFrame(tk.Frame):
 
 if __name__ == '__main__':
     app = TempApp()
-    app.geometry('500x300')
+    app.geometry('650x200')
     app.mainloop()

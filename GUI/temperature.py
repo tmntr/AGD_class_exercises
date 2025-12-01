@@ -9,6 +9,8 @@ class Temperature:
 
     @kelvin.setter
     def kelvin(self,kelvin:float):
+        if kelvin < 0:
+            raise ValueError('This temperature is lower than absolute zero')
         self._kelvin = kelvin
 
     @property
