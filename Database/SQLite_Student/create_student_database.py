@@ -1,6 +1,6 @@
 import sqlite3
 
-conn = sqlite3.connect('students.sqlite')
+conn = sqlite3.connect('student.sqlite')
 cursor = conn.cursor()
 
 #Create a student table
@@ -17,3 +17,4 @@ create_students_table = '''
 #Execute the command
 cursor.execute(create_students_table)
 
+conn.close()
