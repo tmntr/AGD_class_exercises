@@ -6,7 +6,8 @@ id INTEGER PRIMARY KEY AUTOINCREMENT,
 name TEXT NOT NULL,
 age INTEGER,
 gender TEXT,
-nationality TEXT
+nationality TEXT,
+bio TEXT
 );
 """
 
