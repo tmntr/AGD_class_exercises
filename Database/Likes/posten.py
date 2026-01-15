@@ -16,8 +16,9 @@ def post_a_post(userid,title,content):
     except:
         print('Something went wrong')
 
+userid = int(input('Enter userid: '))
 title = input('Enter title: ')
 content = input('Enter content: ')
-userid = int(input('Enter userid: '))
+
 post_a_post(userid,title,content)
 

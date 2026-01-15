@@ -1,4 +1,8 @@
 import sqlite3
+from faker import Faker
+import random
+fake = Faker('en_UK')
+
 
 def program_to_add_user(uname,age=None,gender=None,nationality=None,bio=None):
     try:
@@ -18,7 +22,7 @@ def program_to_add_user(uname,age=None,gender=None,nationality=None,bio=None):
         print("Something went wrong")
 
 
-name = input("Enter your username: ")
+'''name = input("Enter your username: ")
 
 acceptedage = False
 while not acceptedage:
@@ -49,7 +53,22 @@ if nationality.upper() == "N/A":
 bio = input("Please enter a short bio if you wish (or N/A if you wish to leave blank): ")
 
 if bio.upper() == "N/A":
+    bio = None'''
+
+
+for _ in range(10):
+    fakeygender = ['Male', 'Female'][random.randint(0, 1)]
+    if fakeygender == 'Female':
+        fakeyfname = fake.first_name_female()
+        fakeylname = fake.last_name_female()
+    elif fakeygender == 'Male':
+        fakeyfname = fake.first_name_male()
+        fakeylname = fake.last_name_male()
+
+    fakeyage = random.randint(16,17)
+    nationality = None
     bio = None
 
+    program_to_add_user(fakeyfname,fakeyage,fakeygender,nationality,bio)
 
-program_to_add_user(uname=name,age=age,gender=gender,nationality=nationality,bio=bio)
+# program_to_add_user(uname=name,age=age,gender=gender,nationality=nationality,bio=bio)

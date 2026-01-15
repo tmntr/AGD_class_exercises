@@ -1,0 +1,7 @@
+select * from post
+where SUBSTR(description,-1,1) = '?'
+
+update user
+set name = 'Anne'
+where name = 'Annette'
+
