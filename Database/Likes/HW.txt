@@ -5,3 +5,10 @@ update user
 set name = 'Anne'
 where name = 'Annette'
 
+select name, count(post.id)
+from user, post
+where post.user_id = user.id
+group by user_id
+
+select name, comment.content
+from user,comment
