@@ -10,7 +10,7 @@ class Base(so.DeclarativeBase): pass
 # first_name and last_name do not have additional column requirements, so the type hint is sufficient
 
 class Person(Base):
-    __tablename__ = 'persons'
+    __tablename__ = 'person'
     id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
     first_name: so.Mapped[Optional[str]]
     last_name: so.Mapped[str]
