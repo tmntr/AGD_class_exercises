@@ -19,16 +19,13 @@
         </library>
       </libraries>
     </data-source>
-    <data-source source="LOCAL" name="activities" uuid="ead634ec-ec2c-4ca8-97f4-26ccf1f33ac3">
+    <data-source source="LOCAL" name="activities" uuid="8aad8283-e1e3-4089-844d-67bbe8bc2d4d">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\tomnoy0809\PycharmProjects\AGD_class_exercises\Database\Bridgin tables\activities.sqlite</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/Database/Bridgin tables/activities.sqlite</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
-        <library>
-          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.51.1/org/xerial/sqlite-jdbc/3.51.1.0/sqlite-jdbc-3.51.1.0.jar</url>
-        </library>
         <library>
           <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.51.1/org/xerial/sqlite-jdbc/3.51.1.0/sqlite-jdbc-3.51.1.0.jar</url>
         </library>
