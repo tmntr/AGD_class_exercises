@@ -23,15 +23,15 @@ like_table = sa.Table(
 
 class User(Base):
     __tablename__ = 'user'
-    id: Mapped[int] = mapped_column(primary_key = True,autoincrement = True)
-    name: Mapped[str] = mapped_column(unique = True, index = True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(unique=True, index=True)
     age: Mapped[Optional[int]]
     gender: Mapped[Optional[str]]
     nationality: Mapped[Optional[str]]
 
     posts: Mapped[list['Post']] = relationship(
-        back_populates = 'user',
-        cascade = 'all, delete-orphan',
+        back_populates='user',
+        cascade='all, delete-orphan',
     )
 
     #Many-to-many: posts that are liked by the user - defined by the likes table
@@ -41,8 +41,8 @@ class User(Base):
     )
 
     comments_made: Mapped[list['Comment']] = relationship(
-        back_populates = 'user',
-        cascade = 'all, delete-orphan',
+        back_populates='user',
+        cascade='all, delete-orphan',
     )
 
     def __repr__(self):
@@ -84,8 +84,11 @@ class Comment(Base):
     comment: Mapped[str]
     user_id: Mapped[int] = mapped_column(
         sa.ForeignKey(column = 'user.id',ondelete = 'CASCADE'),nullable = False,)
+    post_id: so.Mapped[int] = mapped_column(
+        sa.ForeignKey(column = 'post.id',ondelete = 'CASCADE'), nullable = False,
+    )
 
-    user: Mapped['User'] = so.relationship(back_populates = 'comments_made',)
+    user: Mapped['User'] = so.relationship(back_populates='comments_made')
 
     post: Mapped['Post'] = so.relationship(back_populates = 'comments',)
 
