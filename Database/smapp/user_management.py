@@ -2,12 +2,11 @@ import sqlalchemy as sa
 import sqlalchemy.orm as so
 from models import User, Post, Comment, Base
 
-engine = sa.create_engine('sqlite:///social_media.db', echo=True)
+#engine = sa.create_engine('sqlite:///social_media.db', echo=False)
 
 # Create examples of Users
 
 def add_user(engine,uname,uage = None,ugender = None,unationality = None):
-    engine = sa.create_engine('sqlite:///social_media.db', echo=True)
     # Create a session
     session = so.Session(bind=engine)
     users = [User(name=uname, age=uage, gender=ugender, nationality=unationality),
@@ -31,6 +30,20 @@ def create_user(engine):
         unationality = None
     add_user(engine,uname, uage, ugender, unationality)
 
+def get_userid(engine,uname):
+    session = so.Session(bind=engine)
+
+    qry = (sa.select(User.id).where(User.name == uname))
+
+    #print(session.scalar(qry))
+    return session.scalar(qry)
+
+def user_exists(engine,uname):
+    session = so.Session(bind=engine)
+
+
+    return session.query(User).filter_by(name=uname).scalar() is not None
+
 
 '''
 users = [User(name="Alice", age=30, gender="Female", nationality="Canadian"),
@@ -38,5 +51,3 @@ users = [User(name="Alice", age=30, gender="Female", nationality="Canadian"),
              User(name="Charlie", age=28, gender="Male", nationality="British"),
              User(name="Diana", age=22, gender="Female", nationality="Australian"),]
 '''
-
-create_user()
