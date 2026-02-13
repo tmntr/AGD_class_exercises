@@ -2,7 +2,17 @@ import sqlalchemy as sa
 import sqlalchemy.orm as so
 from models import User, Post, Comment, Base
 from user_management import create_user, user_exists, get_userid
-from post_management import view_posts_by_user, make_post
+from post_management import view_posts_by_user, view_posts_by_recency, make_post,like_post,view_posts_by_likes
+
+def display_post(item):
+    print('\n')
+    banner = f"{item.id}:{item.title}, by {item.user.name}"
+    print(banner)
+    print('=' * len(banner))
+    print(item.description)
+    print(f"{item.number_of_likes()} Likes")
+    print('\n')
+
 
 class stage:
     def __init__(self,engine):
@@ -55,7 +65,7 @@ class stage:
             self.currentstage = 'login'
 
     def posts(self):
-        options = ['View a specific user\'s posts', 'View posts by recency', 'View posts by likes', 'Comment on a post by ID', 'Like a post by ID']
+        options = ['View a specific user\'s posts', 'View posts by recency', 'View posts by likes', 'Comment on a post by ID', 'Like a post by ID','Exit to homepage']
         for i in range(len(options)):
             print(f"{i + 1}: {options[i]}")
         action = input("Choose an option: ")
@@ -63,9 +73,20 @@ class stage:
             username = input("Whose posts would you like to view: ")
             posts = view_posts_by_user(self.engine, username)
             for item in posts:
-                print(item.title)
-                print('='*len(item.title))
-                print(item.content)
+                display_post(item)
+        elif action == '2':
+            posts = view_posts_by_recency(self.engine)
+            for item in posts:
+                display_post(item)
+        elif action == '3':
+            posts = view_posts_by_likes(self.engine)
+            for item in posts:
+                display_post(item)
+        elif action == '4':
+            pass
+        elif action == '5':
+            postid = input("Which post would you like to like: ")
+            like_post(self.engine, postid, self.user)
 
     def post_making(self):
         title = input("Enter a title: ")
