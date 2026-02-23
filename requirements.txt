@@ -3,4 +3,4 @@ numpy ~= 2.3.4
 pygame
 matplotlib  ~= 3.10.7
 faker
-sqlalchemy
+SQLalchemy

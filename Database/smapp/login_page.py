@@ -1,18 +1,25 @@
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from models import User, Post, Comment, Base
-from user_management import create_user, user_exists, get_userid
-from post_management import view_posts_by_user, view_posts_by_recency, make_post,like_post,view_posts_by_likes
+from user_management import *
+from post_management import *
 
 def display_post(item):
     print('\n')
-    banner = f"{item.id}:{item.title}, by {item.user.name}"
+    banner = f"{item.id}:\'{item.title}\', by {item.user.name}"
     print(banner)
-    print('=' * len(banner))
+    print('=' * max([len(banner),len(item.description)]))
     print(item.description)
     print(f"{item.number_of_likes()} Likes")
     print('\n')
 
+def display_comment(item):
+    print('\n')
+    banner = f"{item.user.name}'s comment on post {item.post_id}: \'{item.post.title}\', by {item.post.user.name}"
+    print(banner)
+    print('=' * max([len(banner),len(item.comment)]))
+    print(item.comment)
+    print('\n')
 
 class stage:
     def __init__(self,engine):
@@ -65,7 +72,7 @@ class stage:
             self.currentstage = 'login'
 
     def posts(self):
-        options = ['View a specific user\'s posts', 'View posts by recency', 'View posts by likes', 'Comment on a post by ID', 'Like a post by ID','Exit to homepage']
+        options = ['View a specific user\'s posts', 'View posts by recency', 'View posts by likes', 'Comment on a post by ID', 'Like a post by ID','View all the comments on a particular post','Make a post','Exit to homepage']
         for i in range(len(options)):
             print(f"{i + 1}: {options[i]}")
         action = input("Choose an option: ")
@@ -83,10 +90,24 @@ class stage:
             for item in posts:
                 display_post(item)
         elif action == '4':
-            pass
+            postid = input("Which post would you like to comment on: ")
+            if post_exists(self.engine, postid):
+                comment = input("What would you like to say: ")
+                make_comment(self.engine, postid, self.user, comment)
+            else:
+                print("No such post.")
         elif action == '5':
             postid = input("Which post would you like to like: ")
             like_post(self.engine, postid, self.user)
+        elif action == '6':
+            postid = input("Which post would you like to view the comments of: ")
+            if post_exists(self.engine, postid):
+                for item in view_comments(self.engine, postid):
+                    display_comment(item)
+        elif action == '7':
+            self.currentstage = 'post_making'
+        elif action == '8':
+            self.currentstage = 'homepage'
 
     def post_making(self):
         title = input("Enter a title: ")
@@ -98,7 +119,7 @@ class stage:
         action = input("Would you like to make another post? y/n: ")
 
         if action != 'y':
-            self.currentstage = 'homepage'
+            self.currentstage = 'posts'
 
 
 
