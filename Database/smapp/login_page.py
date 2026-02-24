@@ -91,11 +91,13 @@ class stage:
                 display_post(item)
         elif action == '4':
             postid = input("Which post would you like to comment on: ")
-            if post_exists(self.engine, postid):
-                comment = input("What would you like to say: ")
-                make_comment(self.engine, postid, self.user, comment)
-            else:
-                print("No such post.")
+            if postid != '':
+                if post_exists(self.engine, postid):
+                    comment = input("What would you like to say: ")
+                    make_comment(self.engine, postid, self.user, comment)
+                else:
+                    print("No such post.")
+            print('Invalid input')
         elif action == '5':
             postid = input("Which post would you like to like: ")
             like_post(self.engine, postid, self.user)
