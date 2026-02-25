@@ -11,7 +11,6 @@ def display_post(item):
     print('=' * max([len(banner),len(item.description)]))
     print(item.description)
     print(f"{item.number_of_likes()} Likes")
-    print('\n')
 
 def display_comment(item):
     print('\n')
@@ -19,7 +18,6 @@ def display_comment(item):
     print(banner)
     print('=' * max([len(banner),len(item.comment)]))
     print(item.comment)
-    print('\n')
 
 class stage:
     def __init__(self,engine):
@@ -112,8 +110,8 @@ class stage:
             self.currentstage = 'homepage'
 
     def post_making(self):
-        title = input("Enter a title: ")
-        content = input("Enter a content: ")
+        title = input("Enter title: ")
+        content = input("Enter content: ")
         currentuserid = get_userid(self.engine,self.user)
 
         make_post(self.engine,title,content,currentuserid)
@@ -129,6 +127,7 @@ class stage:
         stages = {'login':self.login, 'homepage':self.homepage,'posts':self.posts, 'post_making':self.post_making}
         nextmove = stages[self.currentstage]
         nextmove()
+        print('\n')
 
 
 engine = sa.create_engine('sqlite:///social_media.db', echo=False)
