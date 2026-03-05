@@ -17,6 +17,14 @@ class Game:
     def set_up(self):
         pass
 
+    def get_pos_background(self,pos):
+        for tile in self.backgrounds:
+            if tile.pos == pos:
+                return tile
+
+    def anything_there(self,pos):
+        return self.get_pos_background(pos).is_solid
+
     def add_background_object(self, thetype: str, thepos: tuple):
         self.backgrounds.append(GameObj(thetype,thepos))
 
@@ -42,9 +50,10 @@ class Game:
 
 
 class GameObj:
-    def __init__(self,kind,pos):
+    def __init__(self,kind,pos,game):
         self.kind = kind
         self.pos = pos
+        self.game = game
 
     @property
     def x(self):
@@ -63,11 +72,28 @@ class GameObj:
 
 
 class Character(GameObj):
-    def __init__(self,name,kind,pos):
-        super().__init__(kind,pos)
+    def __init__(self,name,kind,pos,game):
+        super().__init__(kind,pos,game)
         self.name = name
 
     def find_next_location(self,direction: str):
+        (x,y) = self.pos
+        if direction == 'W':
+            y  -= 1
+        elif direction == 'S':
+            y += 1
+        elif direction == 'A':
+            x -= 1
+        elif direction == 'D':
+            x += 1
+        return (x,y)
+
+    def move(self,direction: str):
+        if self.game.is_solid():
+
+
+
+
 
 
 
