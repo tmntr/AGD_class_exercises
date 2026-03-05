@@ -89,7 +89,12 @@ class Character(GameObj):
         return (x,y)
 
     def move(self,direction: str):
-        if self.game.is_solid():
+        proposed_pos = self.find_next_location(direction)
+        if self.game.anything_there(proposed_pos):
+            return False
+        else:
+            return True
+
 
 
 
