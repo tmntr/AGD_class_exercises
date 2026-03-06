@@ -15,7 +15,9 @@ class Game:
         return self._exit
 
     def set_up(self):
-        pass
+        mcname = input("Please enter your name: ")
+        self.add_mc(mcname)
+
 
     def get_pos_background(self,pos):
         for tile in self.backgrounds:
@@ -23,10 +25,20 @@ class Game:
                 return tile
 
     def anything_there(self,pos):
-        return self.get_pos_background(pos).is_solid
+        return self.get_pos_background(pos).is_solid()
 
     def add_background_object(self, thetype: str, thepos: tuple):
-        self.backgrounds.append(GameObj(thetype,thepos))
+        self.backgrounds.append(GameObj(thetype,thepos,self))
+
+    def add_mc(self,name):
+        self.characters.append(Character(name,'C',self.find_start(),self))
+
+    def find_start(self):
+        thepos = (0,0)
+        for b in self.backgrounds:
+            if b.kind == 'S':
+                thepos = b.pos
+        return thepos
 
     def set_background_from_file(self,filename):
         with open(filename,'r') as filey:
@@ -34,8 +46,8 @@ class Game:
             for line in filey.readlines():
                 line = line.strip()
                 x = 0
-                for letter in line:
-                    self.backgrounds.append(Tile(letter,(x,y)))
+                for letter in line.split(','):
+                    self.backgrounds.append(Tile(letter,(x,y),self))
                     x+=1
                 y += 1
             self.dimensions = (x,y)
@@ -44,7 +56,9 @@ class Game:
     def display(self):
         thegrid = [['' for i in range(self.dimensions[0])] for j in range(self.dimensions[1])]
         for b in self.backgrounds:
-            thegrid[b.y][b.x] = b.__str__()
+            thegrid[b.y][b.x] = b.textrepresent()
+        for char in self.characters:
+            thegrid[char.y][char.x] = char.name[0]
         for line in thegrid:
             print(''.join(line))
 
@@ -63,6 +77,17 @@ class GameObj:
     def y(self):
         return self.pos[1]
 
+    def textrepresent(self):
+        if self.kind == 'S':
+            return '\u2591'
+        elif self.kind == 'W':
+            return '\u2588'
+        elif self.kind == 'E':
+            return '\u2593'
+        elif self.kind == 'F':
+            return ' '
+        else:
+            return '?'
     def __str__(self) -> str:
         pass
 
@@ -88,25 +113,25 @@ class Character(GameObj):
             x += 1
         return (x,y)
 
-    def move(self,direction: str):
+    def moveable(self,direction: str):
         proposed_pos = self.find_next_location(direction)
         if self.game.anything_there(proposed_pos):
             return False
         else:
             return True
 
+    def move(self,direction: str):
+        self.pos = self.find_next_location(direction)
 
-
-
-
-
-
+    def try_to_move(self,direction: str):
+        if self.moveable(direction):
+            self.move(direction)
 
 
 
 class Tile(GameObj):
-    def __init__(self,kind,pos,contents = []):
-        super().__init__(kind,pos)
+    def __init__(self,kind,pos,game,contents = []):
+        super().__init__(kind,pos,game)
         self.contents = contents
 
     def __str__(self):
@@ -116,4 +141,10 @@ thegame = Game()
 
 thegame.set_background_from_file('background.txt')
 
-thegame.display()
+thegame.set_up()
+
+while True:
+    for char in thegame.characters:
+        thegame.display()
+        direction = input("Please enter your direction (WASD): ")
+        char.try_to_move(direction)
