@@ -33,12 +33,29 @@ class Game:
     def add_mc(self,name):
         self.characters.append(Character(name,'C',self.find_start(),self))
 
+    def check_for_win(self):
+        winners = []
+        for mchar in self.characters:
+            if mchar.made_it():
+                winners.append(mchar)
+        return winners
+
+
+
     def find_start(self):
         thepos = (0,0)
         for b in self.backgrounds:
             if b.kind == 'S':
                 thepos = b.pos
         return thepos
+
+    def find_ends(self):
+        theposs = []
+        for b in self.backgrounds:
+            if b.kind == 'E':
+                theposs.append(b.pos)
+        return theposs
+
 
     def set_background_from_file(self,filename):
         with open(filename,'r') as filey:
@@ -53,7 +70,7 @@ class Game:
             self.dimensions = (x,y)
 
             print(self.dimensions)
-    def display(self):
+    def textdisplay(self):
         thegrid = [['' for i in range(self.dimensions[0])] for j in range(self.dimensions[1])]
         for b in self.backgrounds:
             thegrid[b.y][b.x] = b.textrepresent()
@@ -127,6 +144,12 @@ class Character(GameObj):
         if self.moveable(direction):
             self.move(direction)
 
+    def made_it(self):
+        if self.pos in self.game.find_ends():
+            return True
+        else:
+            return False
+
 
 
 class Tile(GameObj):
@@ -137,7 +160,7 @@ class Tile(GameObj):
     def __str__(self):
         return f'{self.kind}'
 
-thegame = Game()
+'''thegame = Game()
 
 thegame.set_background_from_file('background.txt')
 
@@ -147,4 +170,4 @@ while True:
     for char in thegame.characters:
         thegame.display()
         direction = input("Please enter your direction (WASD): ")
-        char.try_to_move(direction)
+        char.try_to_move(direction)'''
