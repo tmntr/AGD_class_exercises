@@ -14,7 +14,7 @@ class Game:
     def exit(self):
         return self._exit
 
-    def set_up(self):
+    def set_up(self,mcname):
         mcname = input("Please enter your name: ")
         self.add_mc(mcname)
 
@@ -31,7 +31,7 @@ class Game:
         self.backgrounds.append(GameObj(thetype,thepos,self))
 
     def add_mc(self,name):
-        self.characters.append(Character(name,'C',self.find_start(),self))
+        self.characters.append(Character(name,self.find_start(),self))
 
     def check_for_win(self):
         winners = []
@@ -71,13 +71,15 @@ class Game:
 
             print(self.dimensions)
     def textdisplay(self):
+        print('╔'+'═'*self.dimensions[0]+'╗')
         thegrid = [['' for i in range(self.dimensions[0])] for j in range(self.dimensions[1])]
         for b in self.backgrounds:
             thegrid[b.y][b.x] = b.textrepresent()
         for char in self.characters:
             thegrid[char.y][char.x] = char.name[0]
         for line in thegrid:
-            print(''.join(line))
+            print('║'+''.join(line)+'║')
+        print('╚' + '═' * self.dimensions[0] + '╝')
 
 
 class GameObj:
@@ -93,6 +95,7 @@ class GameObj:
     @property
     def y(self):
         return self.pos[1]
+
 
     def textrepresent(self):
         if self.kind == 'S':
@@ -114,8 +117,8 @@ class GameObj:
 
 
 class Character(GameObj):
-    def __init__(self,name,kind,pos,game):
-        super().__init__(kind,pos,game)
+    def __init__(self,name,pos,game):
+        super().__init__('C',pos,game)
         self.name = name
 
     def find_next_location(self,direction: str):

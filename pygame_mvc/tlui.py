@@ -1,15 +1,25 @@
 from game_objects import *
 
-thegame = Game()
+class arbitraryTUI:
+    def __init__(self,filename):
+        self.thegame = Game()
+    def initialisegame(self):
+        self.thegame = Game()
+
 
 thegame.set_background_from_file('background.txt')
 
-thegame.set_up()
+noplayers = int(input('How many players would you like?\n'))
 
-while True:
+for i in range(noplayers):
+    thegame.set_up()
+
+
+while not len(thegame.check_for_win()):
     for char in thegame.characters:
         thegame.textdisplay()
-        direction = input("Please enter your direction (WASD): ")
+        print(f'{char.name}\'s turn')
+        direction = input("Please enter your direction (WASD): ").upper()
         char.try_to_move(direction)
-        for item in thegame.check_for_win():
-            print(f"{item.name} wins!")
+for item in thegame.check_for_win():
+    print(f"{item.name} wins!")
