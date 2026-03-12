@@ -27,6 +27,14 @@ class Game:
     def anything_there(self,pos):
         return self.get_pos_background(pos).is_solid()
 
+    def not_void(self,pos):
+        valid = True
+        if pos[0] >= self.dimensions[0] or pos[0] < 0:
+            valid = False
+        elif pos[1] >= self.dimensions[1] or pos[1] < 0:
+            valid = False
+        return valid
+
     def add_background_object(self, thetype: str, thepos: tuple):
         self.backgrounds.append(GameObj(thetype,thepos,self))
 
@@ -135,10 +143,13 @@ class Character(GameObj):
 
     def moveable(self,direction: str):
         proposed_pos = self.find_next_location(direction)
-        if self.game.anything_there(proposed_pos):
-            return False
+        if self.game.not_void(proposed_pos):
+            if self.game.anything_there(proposed_pos):
+                return False
+            else:
+                return True
         else:
-            return True
+            return False
 
     def move(self,direction: str):
         self.pos = self.find_next_location(direction)

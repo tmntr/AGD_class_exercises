@@ -1,18 +1,20 @@
 from game_objects import *
 
-class arbitraryTUI:
+'''class arbitraryTUI:
     def __init__(self,filename):
         self.thegame = Game()
     def initialisegame(self):
-        self.thegame = Game()
+        self.thegame = Game()'''
 
+
+thegame = Game()
 
 thegame.set_background_from_file('background.txt')
 
 noplayers = int(input('How many players would you like?\n'))
 
 for i in range(noplayers):
-    thegame.set_up()
+    thegame.set_up('Carl')
 
 
 while not len(thegame.check_for_win()):
