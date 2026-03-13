@@ -15,6 +15,18 @@ from pygame.locals import (
     QUIT,
 )
 
+class display_object:
+    def __init__(self,file,width,height):
+        pygame.init()
+        self.width = width
+        self.height = height
+        self.sprite = pygame.image.load(file).convert_alpha()
+
+
+
+
+
+
 class screen:
     key_moves = {K_UP: 'w1',
                  K_DOWN: 's1',
@@ -87,6 +99,10 @@ class screen:
         x+=self.cell_dimensions()[0]/2
         y+=self.cell_dimensions()[1]/2
         pygame.draw.circle(self.frame,colour,(x,y),min(self.cell_dimensions())//2)
+
+    def draw_sprite(self,thing):
+        sprite = thing.displayer
+
 
     def convertpos(self,pos):
         (x,y) = pos
