@@ -1,4 +1,4 @@
 from asteroids_objects import *
 
-thegame = Game()
+thegame = Game(800,600)
 thegame.mainloop()
